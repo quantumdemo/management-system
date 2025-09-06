@@ -12,7 +12,7 @@ from app.models import User
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -27,7 +27,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main.index')
+            next_page = url_for('main.dashboard')
         return redirect(next_page)
     return render_template('auth/login.html', title='Sign In', form=form)
 
@@ -82,8 +82,9 @@ def verify_email():
             user.otp_code_hash = None
             user.otp_expiry = None
             db.session.commit()
-            flash('Your account has been successfully verified. Please log in.')
-            return redirect(url_for('auth.login'))
+            login_user(user)
+            flash('Your account has been successfully verified. Welcome!')
+            return redirect(url_for('main.dashboard'))
         else:
             flash('Invalid OTP. Please try again.')
 

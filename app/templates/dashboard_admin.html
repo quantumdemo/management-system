@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <p>Welcome, {{ current_user.username }}!</p>
+
+    <h2>Overview</h2>
+    <!-- Placeholder for overview cards -->
+    <p>Total Students: {{ student_count }}</p>
+    <p>Total Teachers: {{ teacher_count }}</p>
+    <p>Total Parents: {{ parent_count }}</p>
+
+    <h2>Quick Actions</h2>
+    <ul>
+        <li><a href="{{ url_for('admin.add_student') }}">Add Student</a></li>
+        <li><a href="{{ url_for('admin.add_teacher') }}">Add Teacher</a></li>
+        <li><a href="{{ url_for('admin.add_parent') }}">Add Parent</a></li>
+        <li><a href="{{ url_for('admin.add_class') }}">Add Class</a></li>
+        <li><a href="{{ url_for('admin.add_subject') }}">Add Subject</a></li>
+        <li><a href="{{ url_for('admin.assign_teacher') }}">Assign Teacher to Class</a></li>
+    </ul>
+{% endblock %}

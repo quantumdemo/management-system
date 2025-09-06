@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <p>Welcome, {{ current_user.username }}!</p>
+
+    <h2>Your Classes & Subjects</h2>
+    <!-- Placeholder for assigned classes list -->
+    <p>You have [X] classes assigned.</p>
+
+    <h2>Quick Actions</h2>
+    <ul>
+        <li>Mark Attendance (Not Implemented)</li>
+        <li>Enter Grades (Not Implemented)</li>
+    </ul>
+{% endblock %}

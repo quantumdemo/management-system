@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <p>Welcome, {{ current_user.username }}!</p>
+
+    <h2>Your Child/Children</h2>
+    <!-- Placeholder for linked children list -->
+    <p>You have [X] children linked to your account.</p>
+
+    <h2>Quick Links</h2>
+    <ul>
+        <li>View Attendance (Not Implemented)</li>
+        <li>View Results (Not Implemented)</li>
+        <li>Manage Fees (Not Implemented)</li>
+    </ul>
+{% endblock %}

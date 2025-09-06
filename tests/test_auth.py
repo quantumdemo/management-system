@@ -1,7 +1,7 @@
 import pytest
 import datetime
 from app import create_app, db
-from app.models import User
+from app.models import User, Student
 from config import TestConfig
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -57,11 +57,17 @@ def test_successful_verification(test_client):
     user = User(
         username='verify_me',
         email='verify@test.com',
+        role='student',  # Set the role
         otp_code_hash=generate_password_hash(otp),
         otp_expiry=datetime.datetime.utcnow() + datetime.timedelta(minutes=5)
     )
     user.set_password('password')
+
+    # Create the associated Student profile
+    student_profile = Student(admission_no='v123', user=user)
+
     db.session.add(user)
+    db.session.add(student_profile)
     db.session.commit()
 
     response = test_client.post(f'/auth/verify-email?email={user.email}', data={
@@ -70,7 +76,7 @@ def test_successful_verification(test_client):
 
     assert response.status_code == 200
     assert b'Your account has been successfully verified' in response.data
-    assert b'Sign In' in response.data # Should be on login page
+    assert b'Student Dashboard' in response.data # Should be on the dashboard now
 
     verified_user = User.query.filter_by(email='verify@test.com').first()
     assert verified_user.is_verified is True
