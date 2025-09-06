@@ -38,7 +38,11 @@ class Student(db.Model):
     admission_no = db.Column(db.String(20), unique=True, nullable=False)
     admission_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
-    class_id = db.Column(db.Integer, db.ForeignKey('school_class.id'), nullable=True) # A student belongs to one class
+    class_id = db.Column(db.Integer, db.ForeignKey('school_class.id'), nullable=True)
+
+    # Profile fields
+    contact_phone = db.Column(db.String(20), nullable=True)
+    address = db.Column(db.String(200), nullable=True)
 
     parents = db.relationship(
         'Parent', secondary=parent_student_association,
@@ -52,6 +56,11 @@ class Teacher(db.Model):
     date_joined = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
 
+    # Profile fields
+    contact_phone = db.Column(db.String(20), nullable=True)
+    address = db.Column(db.String(200), nullable=True)
+    qualifications = db.Column(db.String(200), nullable=True)
+
     def __repr__(self):
         if self.user:
             return f'<Teacher {self.user.username}>'
@@ -60,6 +69,10 @@ class Teacher(db.Model):
 class Parent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
+
+    # Profile fields
+    contact_phone = db.Column(db.String(20), nullable=True)
+    address = db.Column(db.String(200), nullable=True)
 
     children = db.relationship(
         'Student', secondary=parent_student_association,

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Your Profile</h1>
+
+    <h3>Account Information</h3>
+    <p><strong>Username:</strong> {{ current_user.username }}</p>
+    <p><strong>Email:</strong> {{ current_user.email }}</p>
+    <p><strong>Role:</strong> {{ current_user.role|capitalize }}</p>
+
+    <hr>
+
+    <h3>Profile Details</h3>
+    {% if current_user.role == 'student' and current_user.student %}
+        <p><strong>Admission Number:</strong> {{ current_user.student.admission_no }}</p>
+        <p><strong>Admission Date:</strong> {{ current_user.student.admission_date.strftime('%Y-%m-%d') }}</p>
+        <p><strong>Contact Phone:</strong> {{ current_user.student.contact_phone or 'Not set' }}</p>
+        <p><strong>Address:</strong> {{ current_user.student.address or 'Not set' }}</p>
+    {% elif current_user.role == 'teacher' and current_user.teacher %}
+        <p><strong>Date Joined:</strong> {{ current_user.teacher.date_joined.strftime('%Y-%m-%d') }}</p>
+        <p><strong>Contact Phone:</strong> {{ current_user.teacher.contact_phone or 'Not set' }}</p>
+        <p><strong>Address:</strong> {{ current_user.teacher.address or 'Not set' }}</p>
+        <p><strong>Qualifications:</strong> {{ current_user.teacher.qualifications or 'Not set' }}</p>
+    {% elif current_user.role == 'parent' and current_user.parent %}
+        <p><strong>Contact Phone:</strong> {{ current_user.parent.contact_phone or 'Not set' }}</p>
+        <p><strong>Address:</strong> {{ current_user.parent.address or 'Not set' }}</p>
+    {% else %}
+        <p>No profile details found.</p>
+    {% endif %}
+
+    <hr>
+    <a href="{{ url_for('main.edit_profile') }}">Edit Profile</a>
+
+{% endblock %}

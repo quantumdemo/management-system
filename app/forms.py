@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 from wtforms_sqlalchemy.fields import QuerySelectField
 from app.models import User, SchoolClass, Subject, Teacher
@@ -84,3 +84,21 @@ class AssignTeacherForm(FlaskForm):
     school_class = QuerySelectField('Class', query_factory=get_classes, get_label='name', allow_blank=False)
     subject = QuerySelectField('Subject', query_factory=get_subjects, get_label='name', allow_blank=False)
     submit = SubmitField('Assign')
+
+
+# Forms for editing profiles
+class EditStudentProfileForm(FlaskForm):
+    contact_phone = StringField('Contact Phone')
+    address = TextAreaField('Address')
+    submit = SubmitField('Update Profile')
+
+class EditTeacherProfileForm(FlaskForm):
+    contact_phone = StringField('Contact Phone')
+    address = TextAreaField('Address')
+    qualifications = TextAreaField('Qualifications')
+    submit = SubmitField('Update Profile')
+
+class EditParentProfileForm(FlaskForm):
+    contact_phone = StringField('Contact Phone')
+    address = TextAreaField('Address')
+    submit = SubmitField('Update Profile')
