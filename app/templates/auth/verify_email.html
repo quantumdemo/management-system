@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Verify Your Email</h1>
+    <p>An OTP has been sent to your email address: {{ email }}. Please enter it below to verify your account.</p>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.otp.label }}<br>
+            {{ form.otp(size=6) }}<br>
+            {% for error in form.otp.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <p>Didn't receive the code? <a href="{{ url_for('auth.resend_otp', email=email) }}">Resend OTP</a></p>
+{% endblock %}
