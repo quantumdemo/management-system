@@ -30,3 +30,31 @@ class RegistrationForm(FlaskForm):
 class VerifyEmailForm(FlaskForm):
     otp = StringField('OTP', validators=[DataRequired(), Length(min=6, max=6)])
     submit = SubmitField('Verify')
+
+
+# Forms for Admin to create users
+class AdminCreateUserForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Create User')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different username.')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('Please use a different email address.')
+
+class AdminCreateStudentForm(AdminCreateUserForm):
+    admission_no = StringField('Admission Number', validators=[DataRequired()])
+    submit = SubmitField('Create Student')
+
+class AdminCreateTeacherForm(AdminCreateUserForm):
+    submit = SubmitField('Create Teacher')
+
+class AdminCreateParentForm(AdminCreateUserForm):
+    submit = SubmitField('Create Parent')

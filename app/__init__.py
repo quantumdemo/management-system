@@ -48,4 +48,7 @@ def create_app(config_class=Config):
     from app.blueprints.fees import bp as fees_bp
     app.register_blueprint(fees_bp, url_prefix='/fees')
 
+    from app.blueprints.admin import bp as admin_bp
+    app.register_blueprint(admin_bp, url_prefix='/admin')
+
     return app
