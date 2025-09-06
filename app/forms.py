@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
-from app.models import User
+from wtforms_sqlalchemy.fields import QuerySelectField
+from app.models import User, SchoolClass, Subject, Teacher
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -58,3 +59,28 @@ class AdminCreateTeacherForm(AdminCreateUserForm):
 
 class AdminCreateParentForm(AdminCreateUserForm):
     submit = SubmitField('Create Parent')
+
+
+class CreateClassForm(FlaskForm):
+    name = StringField('Class Name', validators=[DataRequired()])
+    academic_year = StringField('Academic Year (e.g., 2023-2024)', validators=[DataRequired()])
+    submit = SubmitField('Create Class')
+
+class CreateSubjectForm(FlaskForm):
+    name = StringField('Subject Name', validators=[DataRequired()])
+    submit = SubmitField('Create Subject')
+
+def get_teachers():
+    return Teacher.query
+
+def get_classes():
+    return SchoolClass.query
+
+def get_subjects():
+    return Subject.query
+
+class AssignTeacherForm(FlaskForm):
+    teacher = QuerySelectField('Teacher', query_factory=get_teachers, get_label=lambda obj: obj.user.username, allow_blank=False)
+    school_class = QuerySelectField('Class', query_factory=get_classes, get_label='name', allow_blank=False)
+    subject = QuerySelectField('Subject', query_factory=get_subjects, get_label='name', allow_blank=False)
+    submit = SubmitField('Assign')

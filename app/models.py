@@ -38,6 +38,7 @@ class Student(db.Model):
     admission_no = db.Column(db.String(20), unique=True, nullable=False)
     admission_date = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
+    class_id = db.Column(db.Integer, db.ForeignKey('school_class.id'), nullable=True) # A student belongs to one class
 
     parents = db.relationship(
         'Parent', secondary=parent_student_association,
@@ -52,7 +53,6 @@ class Teacher(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=True)
 
     def __repr__(self):
-        # It's safer to check if user exists before accessing attributes
         if self.user:
             return f'<Teacher {self.user.username}>'
         return '<Teacher (no user)>'
@@ -69,3 +69,30 @@ class Parent(db.Model):
         if self.user:
             return f'<Parent {self.user.username}>'
         return '<Parent (no user)>'
+
+class SchoolClass(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    academic_year = db.Column(db.String(20), nullable=False)
+
+    students = db.relationship('Student', backref='school_class', lazy='dynamic')
+
+    def __repr__(self):
+        return f'<SchoolClass {self.name} ({self.academic_year})>'
+
+class Subject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<Subject {self.name}>'
+
+# Association object for Teacher-Class-Subject relationship
+class ClassTeacherSubjectLink(db.Model):
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), primary_key=True)
+    class_id = db.Column(db.Integer, db.ForeignKey('school_class.id'), primary_key=True)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), primary_key=True)
+
+    teacher = db.relationship('Teacher', backref=db.backref('class_subject_links', cascade="all, delete-orphan"))
+    school_class = db.relationship('SchoolClass', backref=db.backref('teacher_subject_links', cascade="all, delete-orphan"))
+    subject = db.relationship('Subject', backref=db.backref('class_teacher_links', cascade="all, delete-orphan"))

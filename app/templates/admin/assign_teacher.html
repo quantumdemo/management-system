@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+
+{% block admin_content %}
+    <h2>Assign a Teacher to a Class and Subject</h2>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.teacher.label }}<br>
+            {{ form.teacher() }}<br>
+            {% for error in form.teacher.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.school_class.label }}<br>
+            {{ form.school_class() }}<br>
+            {% for error in form.school_class.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.subject.label }}<br>
+            {{ form.subject() }}<br>
+            {% for error in form.subject.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}

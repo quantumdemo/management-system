@@ -2,8 +2,11 @@ from flask import render_template, redirect, url_for, flash
 from app.blueprints.admin import bp
 from app.utils.decorators import role_required
 from app.extensions import db
-from app.models import User, Student, Teacher, Parent
-from app.forms import AdminCreateStudentForm, AdminCreateTeacherForm, AdminCreateParentForm
+from app.models import User, Student, Teacher, Parent, SchoolClass, Subject, ClassTeacherSubjectLink
+from app.forms import (
+    AdminCreateStudentForm, AdminCreateTeacherForm, AdminCreateParentForm,
+    CreateClassForm, CreateSubjectForm, AssignTeacherForm
+)
 
 @bp.route('/')
 @role_required('admin')
@@ -103,3 +106,57 @@ def add_parent():
         return redirect(url_for('admin.list_parents'))
 
     return render_template('admin/create_user.html', form=form, title='Create Parent')
+
+
+# Class Management
+@bp.route('/classes')
+@role_required('admin')
+def list_classes():
+    return "List of Classes"
+
+@bp.route('/classes/add', methods=['GET', 'POST'])
+@role_required('admin')
+def add_class():
+    form = CreateClassForm()
+    if form.validate_on_submit():
+        new_class = SchoolClass(name=form.name.data, academic_year=form.academic_year.data)
+        db.session.add(new_class)
+        db.session.commit()
+        flash('New class created successfully.')
+        return redirect(url_for('admin.list_classes'))
+    return render_template('admin/create_class.html', form=form)
+
+# Subject Management
+@bp.route('/subjects')
+@role_required('admin')
+def list_subjects():
+    return "List of Subjects"
+
+@bp.route('/subjects/add', methods=['GET', 'POST'])
+@role_required('admin')
+def add_subject():
+    form = CreateSubjectForm()
+    if form.validate_on_submit():
+        new_subject = Subject(name=form.name.data)
+        db.session.add(new_subject)
+        db.session.commit()
+        flash('New subject created successfully.')
+        return redirect(url_for('admin.list_subjects'))
+    return render_template('admin/create_subject.html', form=form)
+
+# Teacher Assignment
+@bp.route('/assign-teacher', methods=['GET', 'POST'])
+@role_required('admin')
+def assign_teacher():
+    form = AssignTeacherForm()
+    if form.validate_on_submit():
+        link = ClassTeacherSubjectLink(
+            teacher=form.teacher.data,
+            school_class=form.school_class.data,
+            subject=form.subject.data
+        )
+        db.session.add(link)
+        db.session.commit()
+        flash('Teacher successfully assigned to class and subject.')
+        return redirect(url_for('admin.admin_dashboard'))
+    return render_template('admin/assign_teacher.html', form=form)
