@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %}
+
+{% block admin_content %}
+    <h2>{{ title }}</h2>
+    {% if items %}
+        <table border="1" style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="text-align: left; padding: 8px;">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td style="padding: 8px;">{{ item }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No items to display.</p>
+    {% endif %}
+{% endblock %}

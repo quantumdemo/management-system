@@ -6,7 +6,9 @@
         <a href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a> |
         <a href="{{ url_for('admin.list_students') }}">Students</a> |
         <a href="{{ url_for('admin.list_teachers') }}">Teachers</a> |
-        <a href="{{ url_for('admin.list_parents') }}">Parents</a>
+        <a href="{{ url_for('admin.list_parents') }}">Parents</a> |
+        <a href="{{ url_for('admin.list_classes') }}">Classes</a> |
+        <a href="{{ url_for('admin.list_subjects') }}">Subjects</a>
     </nav>
     <hr>
     {% block admin_content %}{% endblock %}

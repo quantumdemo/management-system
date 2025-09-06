@@ -18,7 +18,8 @@ def admin_dashboard():
 @bp.route('/students')
 @role_required('admin')
 def list_students():
-    return "List of Students"
+    students = Student.query.all()
+    return render_template('admin/list_view.html', items=students, title="Students")
 
 @bp.route('/students/add', methods=['GET', 'POST'])
 @role_required('admin')
@@ -51,7 +52,8 @@ def add_student():
 @bp.route('/teachers')
 @role_required('admin')
 def list_teachers():
-    return "List of Teachers"
+    teachers = Teacher.query.all()
+    return render_template('admin/list_view.html', items=teachers, title="Teachers")
 
 @bp.route('/teachers/add', methods=['GET', 'POST'])
 @role_required('admin')
@@ -81,7 +83,8 @@ def add_teacher():
 @bp.route('/parents')
 @role_required('admin')
 def list_parents():
-    return "List of Parents"
+    parents = Parent.query.all()
+    return render_template('admin/list_view.html', items=parents, title="Parents")
 
 @bp.route('/parents/add', methods=['GET', 'POST'])
 @role_required('admin')
@@ -112,7 +115,8 @@ def add_parent():
 @bp.route('/classes')
 @role_required('admin')
 def list_classes():
-    return "List of Classes"
+    classes = SchoolClass.query.all()
+    return render_template('admin/list_view.html', items=classes, title="Classes")
 
 @bp.route('/classes/add', methods=['GET', 'POST'])
 @role_required('admin')
@@ -130,7 +134,8 @@ def add_class():
 @bp.route('/subjects')
 @role_required('admin')
 def list_subjects():
-    return "List of Subjects"
+    subjects = Subject.query.all()
+    return render_template('admin/list_view.html', items=subjects, title="Subjects")
 
 @bp.route('/subjects/add', methods=['GET', 'POST'])
 @role_required('admin')
